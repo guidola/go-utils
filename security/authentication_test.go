@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"gitlab.com/terno/TernoAPI/database"
 	"os"
 	"net/http/httptest"
 )

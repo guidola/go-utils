@@ -6,7 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"bytes"
-	"gitlab.com/terno/TernoAPI/database"
+	"github.com/guidola/go-utils/database"
 	"path/filepath"
 	"os"
 	"net/http/httptest"
@@ -32,7 +32,7 @@ func TestJwtFromHeader(t* testing.T){
 
 	for _, test_case := range test_cases {
 
-		req.Header().Set(echo.HeaderAuthorization, test_case.in)
+		req.Header.Set(echo.HeaderAuthorization, test_case.in)
 
 		extractor := JwtFromHeader(prefix)
 		auth, err := extractor(c)
@@ -80,7 +80,7 @@ func TestRSA_JWT(t *testing.T) {
 			200},
 	}
 
-	var redisURI = os.Getenv(database.RedisURI)
+	var redisURI = os.Getenv("REDIS_URI")
 
 	e := echo.New()
 	req := httptest.NewRequest(echo.GET, "/", nil)
@@ -90,14 +90,14 @@ func TestRSA_JWT(t *testing.T) {
 		return c.String(http.StatusOK, "test")
 	}
 
-	database.GetRedisInstance().Create("tcp", redisURI, database.RedisMaxPoolSize)
+	database.GetRedisInstance().Create("tcp", redisURI, 5)
 	defer database.GetRedisInstance().Destroy()
 
 	//testing incoming tokens that must fail
 	for _, test_case := range must_reject_test_cases{
 
 		auth := "jwt$" + test_case.token
-		req.Header().Set(echo.HeaderAuthorization, auth)
+		req.Header.Set(echo.HeaderAuthorization, auth)
 		m := RSA_JWT(GetRSAPublicKey(os.Getenv(JwtCertsLocation) + "public_key.pem"))(handler)
 		me := m(c).(*echo.HTTPError)
 		if me.Code != test_case.code {

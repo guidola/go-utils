@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"net/http"
 	"github.com/dgrijalva/jwt-go"
-	"gitlab.com/terno/TernoAPI/database"
+	"github.com/guidola/go-utils/database"
 	"time"
 	"fmt"
 	"gitlab.com/terno/TernoAPI/model"

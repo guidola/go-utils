@@ -4,8 +4,8 @@ import (
 	"crypto/rsa"
 	"io/ioutil"
 	"github.com/dgrijalva/jwt-go"
-	"gitlab.com/terno/TernoAPI/error_msg"
 	"fmt"
+	"errors"
 )
 
 const JwtCertsLocation = "JWT_CERTS_LOCATION"
@@ -14,7 +14,7 @@ func GetRSAPublicKey(filepath string) *rsa.PublicKey {
 
 	key_file, err_1 := ioutil.ReadFile(filepath)
 	if err_1 != nil {
-		panic(error_msg.FileNotFoundError)
+		panic(errors.New("The provided file path does not point to an existing file"))
 	}
 
 	pub_rsa_key, err := jwt.ParseRSAPublicKeyFromPEM(key_file)
@@ -31,7 +31,7 @@ func GetRSAPrivateKey(filepath string) *rsa.PrivateKey {
 	key_file, err_1 := ioutil.ReadFile(filepath)
 	if err_1 != nil {
 		fmt.Println(filepath)
-		panic(error_msg.FileNotFoundError)
+		panic(errors.New("The provided file path does not point to an existing file"))
 	}
 
 	priv_rsa_key, err := jwt.ParseRSAPrivateKeyFromPEM(key_file)
